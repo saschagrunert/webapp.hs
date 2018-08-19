@@ -16,8 +16,25 @@ description: Please see the README on GitHub at
   <https://github.com/saschagrunert/failure#readme>
 
 dependencies:
+  - aeson
   - base
+  - bytestring
+  - data-default
+  - fast-logger
+  - file-embed
+  - http-client
+  - http-client-tls
+  - monad-logger
+  - template-haskell
+  - text
+  - wai
+  - wai-extra
+  - wai-logger
+  - warp
+  - yaml
+  - yesod
   - yesod-core
+  - yesod-static
 
 ghc-options:
   - -Weverything
@@ -36,8 +53,29 @@ default-extensions:
   - TypeFamilies
   - ViewPatterns
 
+flags:
+  library-only:
+    description: Build for use with "yesod devel"
+    manual: false
+    default: false
+  dev:
+    description: Turn on development settings, like auto-reload templates.
+    manual: false
+    default: false
+
 library:
   source-dirs: src
+  when:
+    - condition: (flag(dev)) || (flag(library-only))
+      then:
+        ghc-options:
+          - -fwarn-tabs
+          - -O0
+        cpp-options: -DDEVELOPMENT
+      else:
+        ghc-options:
+          - -fwarn-tabs
+          - -O2
 
 executables:
   webapp:
@@ -49,3 +87,6 @@ executables:
       - -with-rtsopts=-N
     dependencies:
       - webapp
+    when:
+      - condition: flag(library-only)
+        buildable: false
