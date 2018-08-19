@@ -6,12 +6,14 @@ module Application
   , develMain
   ) where
 
+import Control.Lens                         ((^.))
 import Control.Monad                        (when)
 import Control.Monad.Logger                 (LogLevel (LevelError), liftLoc,
                                              toLogStr)
 import Data.Default                         (def)
 import Foundation                           (App (App, appHttpManager, appLogger, appSettings, appStatic),
-                                             Route (HomeR), resourcesApp)
+                                             Route (HomeR, StaticR),
+                                             resourcesApp)
 import Handler.Home                         (getHomeR)
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.HTTP.Client.TLS              (getGlobalManager)
@@ -24,7 +26,10 @@ import Network.Wai.Middleware.RequestLogger (Destination (Logger), IPAddrSource 
                                              OutputFormat (Apache, Detailed),
                                              destination, mkRequestLogger,
                                              outputFormat)
-import Settings                             (AppSettings (appDetailedRequestLogging, appHost, appIpFromHeader, appMutableStatic, appPort, appStaticDir),
+import Settings                             (AppSettings,
+                                             appDetailedRequestLogging, appHost,
+                                             appIpFromHeader, appMutableStatic,
+                                             appPort, appStaticDir,
                                              configSettingsYmlValue)
 import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet)
 import Yesod.Core                           (defaultMiddlewaresNoLogging,
@@ -68,10 +73,10 @@ makeFoundation settings = do
   httpManager <- getGlobalManager
   logger <- newStdoutLoggerSet defaultBufSize >>= makeYesodLogger
   stat <-
-    (if appMutableStatic settings
+    (if settings ^. appMutableStatic
        then staticDevel
        else static)
-      (appStaticDir settings)
+      (settings ^. appStaticDir)
   return
     App
     { appSettings = settings
@@ -85,8 +90,8 @@ makeFoundation settings = do
 -- @since 0.1.0
 warpSettings :: App -> Settings
 warpSettings foundation =
-  setPort (appPort $ appSettings foundation) $
-  setHost (appHost $ appSettings foundation) $
+  setPort (appSettings foundation ^. appPort) $
+  setHost (appSettings foundation ^. appHost) $
   setOnException
     (\_req e ->
        when (defaultShouldDisplayException e) $
@@ -117,10 +122,10 @@ makeLogWare foundation =
   mkRequestLogger
     def
     { outputFormat =
-        if appDetailedRequestLogging $ appSettings foundation
+        if appSettings foundation ^. appDetailedRequestLogging
           then Detailed True
           else Apache
-                 (if appIpFromHeader $ appSettings foundation
+                 (if appSettings foundation ^. appIpFromHeader
                     then FromFallback
                     else FromSocket)
     , destination = Logger . loggerSet $ appLogger foundation

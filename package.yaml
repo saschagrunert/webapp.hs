@@ -24,6 +24,7 @@ dependencies:
   - file-embed
   - http-client
   - http-client-tls
+  - lens
   - monad-logger
   - template-haskell
   - wai

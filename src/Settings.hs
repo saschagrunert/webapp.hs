@@ -1,5 +1,4 @@
 {-# LANGUAGE CPP             #-}
-{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 -- | Runtime application configuration
@@ -7,10 +6,17 @@
 -- @since 0.1.0
 module Settings
   ( AppSettings(..)
+  , appDetailedRequestLogging
+  , appHost
+  , appIpFromHeader
+  , appMutableStatic
+  , appPort
+  , appStaticDir
   , configSettingsYmlValue
   ) where
 
 import Control.Exception        (throw)
+import Control.Lens             (makeLenses)
 import Data.Aeson               (FromJSON (parseJSON), withObject, (.!=), (.:),
                                  (.:?))
 import Data.ByteString          (ByteString)
@@ -24,13 +30,15 @@ import Yesod.Default.Config2    (configSettingsYml)
 --
 -- @since 0.1.0
 data AppSettings = AppSettings
-    { appStaticDir              :: String
-    , appHost                   :: HostPreference
-    , appPort                   :: Int
-    , appIpFromHeader           :: Bool
-    , appDetailedRequestLogging :: Bool
-    , appMutableStatic          :: Bool
+    { _appStaticDir              :: String
+    , _appHost                   :: HostPreference
+    , _appPort                   :: Int
+    , _appIpFromHeader           :: Bool
+    , _appDetailedRequestLogging :: Bool
+    , _appMutableStatic          :: Bool
     }
+
+makeLenses ''AppSettings
 
 -- | Yaml parsing instance for the AppSettings
 --
@@ -43,14 +51,20 @@ instance FromJSON AppSettings where
 #else
                 False
 #endif
-        appStaticDir              <- o .: "static-dir"
-        appHost                   <- fromString <$> o .: "host"
-        appPort                   <- o .: "port"
-        appIpFromHeader           <- o .: "ip-from-header"
-        dev                       <- o .:? "development"      .!= defaultDev
-        appDetailedRequestLogging <- o .:? "detailed-logging" .!= dev
-        appMutableStatic          <- o .:? "mutable-static"   .!= dev
-        return AppSettings {..}
+        staticDir              <- o .: "static-dir"
+        host                   <- fromString <$> o .: "host"
+        port                   <- o .: "port"
+        ipFromHeader           <- o .: "ip-from-header"
+        dev                    <- o .:? "development"      .!= defaultDev
+        detailedRequestLogging <- o .:? "detailed-logging" .!= dev
+        mutableStatic          <- o .:? "mutable-static"   .!= dev
+        return AppSettings { _appStaticDir = staticDir
+                           , _appHost = host
+                           , _appPort = port
+                           , _appIpFromHeader = ipFromHeader
+                           , _appDetailedRequestLogging = detailedRequestLogging
+                           , _appMutableStatic = mutableStatic
+                           }
 
 -- | `config/settings.yml`, parsed to a `Value`.
 --
