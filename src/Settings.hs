@@ -26,15 +26,11 @@ import Yesod.Default.Config2    (configSettingsYml)
 -- @since 0.1.0
 data AppSettings = AppSettings
     { appStaticDir              :: String
-    , appRoot                   :: Maybe Text
     , appHost                   :: HostPreference
     , appPort                   :: Int
     , appIpFromHeader           :: Bool
     , appDetailedRequestLogging :: Bool
-    , appShouldLogAll           :: Bool
-    , appReloadTemplates        :: Bool
     , appMutableStatic          :: Bool
-    , appSkipCombining          :: Bool
     }
 
 -- | Yaml parsing instance for the AppSettings
@@ -49,16 +45,12 @@ instance FromJSON AppSettings where
                 False
 #endif
         appStaticDir              <- o .: "static-dir"
-        appRoot                   <- o .:? "approot"
         appHost                   <- fromString <$> o .: "host"
         appPort                   <- o .: "port"
         appIpFromHeader           <- o .: "ip-from-header"
         dev                       <- o .:? "development"      .!= defaultDev
         appDetailedRequestLogging <- o .:? "detailed-logging" .!= dev
-        appShouldLogAll           <- o .:? "should-log-all"   .!= dev
-        appReloadTemplates        <- o .:? "reload-templates" .!= dev
         appMutableStatic          <- o .:? "mutable-static"   .!= dev
-        appSkipCombining          <- o .:? "skip-combining"   .!= dev
         return AppSettings {..}
 
 -- | `config/settings.yml`, parsed to a `Value`.
