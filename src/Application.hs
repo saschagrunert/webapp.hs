@@ -12,7 +12,7 @@ import Control.Monad.Logger                 (LogLevel (LevelError), liftLoc,
 import Data.Default                         (def)
 import Foundation                           (App (App, appHttpManager, appLogger, appSettings, appStatic),
                                              Route (HomeR), resourcesApp)
-import Home                                 (getHomeR)
+import Handler.Home                         (getHomeR)
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.HTTP.Client.TLS              (getGlobalManager)
 import Network.Wai                          (Application, Middleware)

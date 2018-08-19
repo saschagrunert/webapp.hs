@@ -16,7 +16,6 @@ import Data.Aeson               (FromJSON (parseJSON), withObject, (.!=), (.:),
 import Data.ByteString          (ByteString)
 import Data.FileEmbed           (embedFile)
 import Data.String              (fromString)
-import Data.Text                (Text)
 import Data.Yaml                (Value, decodeEither')
 import Network.Wai.Handler.Warp (HostPreference)
 import Yesod.Default.Config2    (configSettingsYml)

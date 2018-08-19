@@ -1,4 +1,4 @@
-module Home
+module Handler.Home
   ( getHomeR
   ) where
 
