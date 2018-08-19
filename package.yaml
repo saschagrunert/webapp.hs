@@ -1,0 +1,51 @@
+---
+name: webapp
+version: 0.1.0
+github: saschagrunert/webapp.hs
+license: MIT
+author: Sascha Grunert
+maintainer: mail@saschagrunert.de
+copyright: 2018 Sascha Grunert
+
+extra-source-files:
+  - README.md
+
+synopsis: An approach in bringing yesod and miso together
+category: Failure
+description: Please see the README on GitHub at
+  <https://github.com/saschagrunert/failure#readme>
+
+dependencies:
+  - base
+  - yesod-core
+
+ghc-options:
+  - -Weverything
+  - -Wno-all-missed-specialisations
+  - -Wno-implicit-prelude
+  - -Wno-missed-specialisations
+  - -Wno-missing-exported-signatures
+  - -Wno-missing-import-lists
+  - -Wno-missing-local-signatures
+  - -Wno-monomorphism-restriction
+  - -Wno-safe
+  - -Wno-unsafe
+
+default-extensions:
+  - OverloadedStrings
+  - TypeFamilies
+  - ViewPatterns
+
+library:
+  source-dirs: src
+
+executables:
+  webapp:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -rtsopts
+      - -threaded
+      - -with-rtsopts=-N
+    dependencies:
+      - webapp
