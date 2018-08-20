@@ -3,7 +3,10 @@ module Handler.Home
   ) where
 
 import Foundation (Handler)
-import Yesod.Core (Html, defaultLayout, setTitle)
+import Yesod.Core (sendFile, typeHtml)
 
-getHomeR :: Handler Html
-getHomeR = defaultLayout $ setTitle "Home"
+-- | The default home handler, which simply serves the static index file
+--
+-- @since 0.1.0
+getHomeR :: Handler ()
+getHomeR = sendFile typeHtml "static/index.html"

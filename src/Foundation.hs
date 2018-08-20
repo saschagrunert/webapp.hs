@@ -12,8 +12,9 @@ module Foundation
 import Control.Monad.Logger (LogLevel, LogSource)
 import Network.HTTP.Client  (Manager)
 import Settings             (AppSettings)
-import Yesod.Core           (Route, Yesod (makeLogger, shouldLogIO),
-                             mkYesodData, parseRoutesFile, renderRoute)
+import Yesod.Core           (Route, SessionBackend,
+                             Yesod (makeLogger, makeSessionBackend, shouldLogIO),
+                             mkYesodData, parseRoutesFileNoCheck, renderRoute)
 import Yesod.Core.Types     (Logger)
 import Yesod.Static         (Static)
 
@@ -27,7 +28,7 @@ data App = App
   , appLogger      :: Logger
   }
 
-mkYesodData "App" $(parseRoutesFile "config/routes")
+mkYesodData "App" $(parseRoutesFileNoCheck "config/routes")
 
 -- | The yesod instance of the application
 --
@@ -35,5 +36,7 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 instance Yesod App where
   makeLogger :: App -> IO Logger
   makeLogger = return . appLogger
+  makeSessionBackend :: App -> IO (Maybe SessionBackend)
+  makeSessionBackend _ = return Nothing
   shouldLogIO :: App -> LogSource -> LogLevel -> IO Bool
   shouldLogIO _ _ _ = return True
