@@ -79,7 +79,7 @@ library:
 
 executables:
   webapp:
-    main: Main.hs
+    main: main.hs
     source-dirs: app
     ghc-options:
       - -rtsopts
