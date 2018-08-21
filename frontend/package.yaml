@@ -1,0 +1,20 @@
+---
+name: webapp-frontend
+
+_package: !include "../package-defaults.yaml"
+<<: *package-defaults
+
+dependencies:
+  - base
+  - miso
+  - webapp
+
+library:
+  source-dirs: src
+
+executables:
+  server:
+    main: main.hs
+    source-dirs: bin
+    dependencies:
+      - webapp-frontend
