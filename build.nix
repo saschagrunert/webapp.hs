@@ -1,7 +1,6 @@
 { compiler ? "ghc843" }:
 let
   bootstrap = import <nixpkgs> { };
-
   nixpkgs = builtins.fromJSON (builtins.readFile ./nixpkgs.json);
 
   src = bootstrap.fetchFromGitHub {
@@ -24,6 +23,7 @@ let
       };
     };
   };
+
   pkgs = import src { inherit config; };
 
 in {

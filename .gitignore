@@ -27,5 +27,5 @@ cabal.project.local
 cabal.sandbox.config
 config/client_session_key.aes
 dist*
-result
+result*
 yesod-devel/
