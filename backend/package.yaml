@@ -6,7 +6,7 @@ _package: !include "../package-defaults.yaml"
 
 dependencies:
   - base
-  - webapp
+  - webapp-common
   - aeson
   - bytestring
   - data-default
@@ -53,7 +53,7 @@ library:
 executables:
   server:
     main: main.hs
-    source-dirs: bin
+    source-dirs: app
     ghc-options:
       - -rtsopts
       - -threaded

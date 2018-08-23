@@ -1,10 +1,10 @@
 ---
 - &package-defaults
   author: Sascha Grunert
-  category: Failure
   copyright: 2018 Sascha Grunert
+  category: Web
   description: Please see the README on GitHub at
-    <https://github.com/saschagrunert/failure#readme>
+    <https://github.com/saschagrunert/webapp.hs#readme>
   github: saschagrunert/webapp.hs
   license: MIT
   maintainer: mail@saschagrunert.de

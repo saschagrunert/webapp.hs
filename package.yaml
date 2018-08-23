@@ -1,5 +1,5 @@
 ---
-name: webapp
+name: webapp-common
 
 _package: !include "package-defaults.yaml"
 <<: *package-defaults

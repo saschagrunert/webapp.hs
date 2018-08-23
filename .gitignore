@@ -1,5 +1,6 @@
 *.aes
 *.aux
+*.cabal
 *.chi
 *.chs.h
 *.dyn_hi
@@ -26,3 +27,4 @@ cabal.project.local
 cabal.sandbox.config
 config/client_session_key.aes
 dist*
+yesod-devel/

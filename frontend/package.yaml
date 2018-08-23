@@ -7,7 +7,7 @@ _package: !include "../package-defaults.yaml"
 dependencies:
   - base
   - miso
-  - webapp
+  - webapp-common
 
 library:
   source-dirs: src
