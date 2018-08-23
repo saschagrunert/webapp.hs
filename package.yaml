@@ -1,11 +1,27 @@
 ---
 name: webapp-common
-
-_package: !include "package-defaults.yaml"
-<<: *package-defaults
-
+version: 0.1.0
+author: Sascha Grunert
+copyright: 2018 Sascha Grunert
+category: Web
+description: Please see the README on GitHub at
+  <https://github.com/saschagrunert/webapp.hs#readme>
+github: saschagrunert/webapp.hs
+license: MIT
+maintainer: mail@saschagrunert.de
+synopsis: An approach in bringing yesod and miso together
+ghc-options:
+  - -Weverything
+  - -Wno-all-missed-specialisations
+  - -Wno-implicit-prelude
+  - -Wno-missed-specialisations
+  - -Wno-missing-exported-signatures
+  - -Wno-missing-import-lists
+  - -Wno-missing-local-signatures
+  - -Wno-monomorphism-restriction
+  - -Wno-safe
+  - -Wno-unsafe
 dependencies:
   - base
-
 library:
   source-dirs: src

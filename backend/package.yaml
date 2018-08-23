@@ -1,9 +1,30 @@
 ---
 name: webapp-backend
-
-_package: !include "../package-defaults.yaml"
-<<: *package-defaults
-
+version: 0.1.0
+author: Sascha Grunert
+copyright: 2018 Sascha Grunert
+category: Web
+description: Please see the README on GitHub at
+  <https://github.com/saschagrunert/webapp.hs#readme>
+github: saschagrunert/webapp.hs
+license: MIT
+maintainer: mail@saschagrunert.de
+synopsis: An approach in bringing yesod and miso together
+ghc-options:
+  - -Weverything
+  - -Wno-all-missed-specialisations
+  - -Wno-implicit-prelude
+  - -Wno-missed-specialisations
+  - -Wno-missing-exported-signatures
+  - -Wno-missing-import-lists
+  - -Wno-missing-local-signatures
+  - -Wno-monomorphism-restriction
+  - -Wno-safe
+  - -Wno-unsafe
+default-extensions:
+  - OverloadedStrings
+  - TypeFamilies
+  - ViewPatterns
 dependencies:
   - base
   - webapp-common
@@ -25,7 +46,6 @@ dependencies:
   - yesod
   - yesod-core
   - yesod-static
-
 flags:
   library-only:
     description: Build for use with "yesod devel"
@@ -35,7 +55,6 @@ flags:
     description: Turn on development settings, like auto-reload templates.
     manual: false
     default: false
-
 library:
   source-dirs: src
   when:
@@ -49,7 +68,6 @@ library:
         ghc-options:
           - -fwarn-tabs
           - -O2
-
 executables:
   server:
     main: main.hs

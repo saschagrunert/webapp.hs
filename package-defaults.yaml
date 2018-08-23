@@ -1,5 +1,6 @@
 ---
 - &package-defaults
+  version: 0.1.0
   author: Sascha Grunert
   copyright: 2018 Sascha Grunert
   category: Web
@@ -9,7 +10,6 @@
   license: MIT
   maintainer: mail@saschagrunert.de
   synopsis: An approach in bringing yesod and miso together
-  version: 0.1.0
 
   ghc-options:
     - -Weverything

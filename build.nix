@@ -1,4 +1,4 @@
-{ compiler ? "ghc843" }:
+{ ghcVersion ? "ghc843" }:
 let
   bootstrap = import <nixpkgs> { };
   nixpkgs = builtins.fromJSON (builtins.readFile ./nixpkgs.json);
@@ -13,7 +13,7 @@ let
     packageOverrides = pkgs: rec {
       haskell = pkgs.haskell // {
         packages = pkgs.haskell.packages // {
-          "${compiler}" = pkgs.haskell.packages."${compiler}".override {
+          "${ghcVersion}" = pkgs.haskell.packages."${ghcVersion}".override {
             overrides = haskellPackagesNew: haskellPackagesOld: rec {
               webapp-common = haskellPackagesNew.callPackage ./default.nix { };
               webapp-backend = haskellPackagesNew.callPackage ./backend/default.nix { };
@@ -27,6 +27,6 @@ let
   pkgs = import src { inherit config; };
 
 in {
-  webapp-common = pkgs.haskell.packages.${compiler}.webapp-common;
-  webapp-backend = pkgs.haskell.packages.${compiler}.webapp-backend;
+  webapp-common = pkgs.haskell.packages.${ghcVersion}.webapp-common;
+  webapp-backend = pkgs.haskell.packages.${ghcVersion}.webapp-backend;
 }
