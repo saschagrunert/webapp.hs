@@ -1,3 +1,4 @@
+{ compiler ? "ghc843" }:
 let
   bootstrap = import <nixpkgs> { };
 
@@ -9,7 +10,23 @@ let
     inherit (nixpkgs) rev sha256;
   };
 
-  pkgs = import src { };
+  config = {
+    packageOverrides = pkgs: rec {
+      haskell = pkgs.haskell // {
+        packages = pkgs.haskell.packages // {
+          "${compiler}" = pkgs.haskell.packages."${compiler}".override {
+            overrides = haskellPackagesNew: haskellPackagesOld: rec {
+              webapp-common = haskellPackagesNew.callPackage ./default.nix { };
+              webapp-backend = haskellPackagesNew.callPackage ./backend/default.nix { };
+            };
+          };
+        };
+      };
+    };
+  };
+  pkgs = import src { inherit config; };
 
-in
-  pkgs.haskellPackages.callPackage ./default.nix { }
+in {
+  webapp-common = pkgs.haskell.packages.${compiler}.webapp-common;
+  webapp-backend = pkgs.haskell.packages.${compiler}.webapp-backend;
+}
