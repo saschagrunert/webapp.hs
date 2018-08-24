@@ -1,0 +1,36 @@
+cabal-version: >= 1.10
+
+-- This file has been generated from package.yaml by hpack version 0.29.7.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 1041c75be7b117ab1497277e9d04301d6c980a27cc96d73e25c8f5f277017127
+
+name:           common
+version:        0.1.0
+description:    Please see the README on GitHub at <https://github.com/saschagrunert/webapp.hs#readme>
+category:       Web
+homepage:       https://github.com/saschagrunert/webapp.hs#readme
+bug-reports:    https://github.com/saschagrunert/webapp.hs/issues
+author:         Sascha Grunert
+maintainer:     mail@saschagrunert.de
+copyright:      2018 Sascha Grunert
+license:        MIT
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/saschagrunert/webapp.hs
+
+library
+  exposed-modules:
+      Common
+  other-modules:
+      Paths_common
+  hs-source-dirs:
+      src
+  default-extensions: OverloadedStrings TypeFamilies ViewPatterns
+  ghc-options: -Weverything -Wno-all-missed-specialisations -Wno-implicit-prelude -Wno-missed-specialisations -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-safe -Wno-unsafe
+  build-depends:
+      base
+  default-language: Haskell2010

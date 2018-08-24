@@ -1,33 +1,10 @@
 ---
-name: webapp-backend
-version: 0.1.0
-author: Sascha Grunert
-copyright: 2018 Sascha Grunert
-category: Web
-description: Please see the README on GitHub at
-  <https://github.com/saschagrunert/webapp.hs#readme>
-github: saschagrunert/webapp.hs
-license: MIT
-maintainer: mail@saschagrunert.de
-synopsis: An approach in bringing yesod and miso together
-ghc-options:
-  - -Weverything
-  - -Wno-all-missed-specialisations
-  - -Wno-implicit-prelude
-  - -Wno-missed-specialisations
-  - -Wno-missing-exported-signatures
-  - -Wno-missing-import-lists
-  - -Wno-missing-local-signatures
-  - -Wno-monomorphism-restriction
-  - -Wno-safe
-  - -Wno-unsafe
-default-extensions:
-  - OverloadedStrings
-  - TypeFamilies
-  - ViewPatterns
+name: backend
+_package: !include "../default.yaml"
+<<: *package-defaults
 dependencies:
   - base
-  - webapp-common
+  - common
   - aeson
   - bytestring
   - data-default
@@ -77,7 +54,7 @@ executables:
       - -threaded
       - -with-rtsopts=-N
     dependencies:
-      - webapp-backend
+      - backend
     when:
       - condition: flag(library-only)
         buildable: false

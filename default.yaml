@@ -9,8 +9,6 @@
   github: saschagrunert/webapp.hs
   license: MIT
   maintainer: mail@saschagrunert.de
-  synopsis: An approach in bringing yesod and miso together
-
   ghc-options:
     - -Weverything
     - -Wno-all-missed-specialisations

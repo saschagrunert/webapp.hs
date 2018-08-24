@@ -1,0 +1,8 @@
+---
+name: common
+_package: !include "../default.yaml"
+<<: *package-defaults
+dependencies:
+  - base
+library:
+  source-dirs: src

@@ -1,6 +1,5 @@
 *.aes
 *.aux
-*.cabal
 *.chi
 *.chs.h
 *.dyn_hi
