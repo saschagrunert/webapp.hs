@@ -7,7 +7,7 @@
 -- 1. Start up GHCi
 --    $ stack ghci webapp:lib --no-load --work-dir .stack-work-devel
 -- 2. Load this module
---    > :l app/DevelMain.hs
+--    > :l app/ghci.hs
 -- 3. Run @update@
 --    >  Ghci.update
 -- 4. Your app should now be running, you can connect at http://localhost:3000
@@ -71,10 +71,10 @@ shutdown :: IO ()
 shutdown = do
   mtidStore <- lookupStore tidStoreNum
   case mtidStore of
-    Nothing -> putStrLn "no Yesod app running"
+    Nothing -> putStrLn "no app running"
     Just tidStore -> do
       withStore tidStore $ readIORef >=> killThread
-      putStrLn "Yesod app is shutdown"
+      putStrLn "app is shutdown"
 
 tidStoreNum :: Word32
 tidStoreNum = 1
