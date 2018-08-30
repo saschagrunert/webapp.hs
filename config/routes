@@ -1,0 +1,4 @@
+/static         StaticR     Static appStatic
+/favicon.ico    FaviconR    GET
+/               HomeR       GET POST
+/comments       CommentR    POST
