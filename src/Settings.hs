@@ -19,12 +19,12 @@ module Settings
 
 import           ClassyPrelude.Yesod
 import qualified Control.Exception          as Exception
-import           Control.Lens               (makeLenses, (^.))
+import           Control.Lens               (makeLenses)
 import           Data.Aeson                 (Result (..), fromJSON, withObject,
                                              (.!=), (.:?))
 import           Data.FileEmbed             (embedFile)
 import           Data.Yaml                  (decodeEither')
-import           Language.Haskell.TH.Syntax (Exp, Name, Q)
+import           Language.Haskell.TH.Syntax (Exp, Q)
 import           Network.Wai.Handler.Warp   (HostPreference)
 import           Yesod.Default.Config2      (applyEnvValue, configSettingsYml)
 import           Yesod.Default.Util         (WidgetFileSettings,
@@ -40,7 +40,6 @@ data AppSettings = AppSettings
   , _appIpFromHeader           :: Bool
   , _appDetailedRequestLogging :: Bool
   , _appMutableStatic          :: Bool
-  , _appSkipCombining          :: Bool
   }
 
 makeLenses ''AppSettings
@@ -61,7 +60,6 @@ instance FromJSON AppSettings where
       dev <- o .:? "development" .!= defaultDev
       _appDetailedRequestLogging <- o .:? "detailed-logging" .!= dev
       _appMutableStatic <- o .:? "mutable-static" .!= dev
-      _appSkipCombining <- o .:? "skip-combining" .!= dev
       return
         AppSettings
         { _appStaticDir = _appStaticDir
@@ -70,7 +68,6 @@ instance FromJSON AppSettings where
         , _appIpFromHeader = _appIpFromHeader
         , _appDetailedRequestLogging = _appDetailedRequestLogging
         , _appMutableStatic = _appMutableStatic
-        , _appSkipCombining = _appSkipCombining
         }
 
 -- | Settings for 'widgetFile', such as which template languages to support and

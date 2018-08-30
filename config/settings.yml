@@ -10,4 +10,3 @@ ip-from-header: _env:YESOD_IP_FROM_HEADER:false
 # development: false
 # detailed-logging: false
 # mutable-static: false
-# skip-combining: false

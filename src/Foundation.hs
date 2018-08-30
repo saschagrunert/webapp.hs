@@ -4,7 +4,12 @@
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
 
-module Foundation where
+module Foundation
+  ( App(..)
+  , Handler
+  , Route(..)
+  , resourcesApp
+  ) where
 
 import           Control.Lens         ((^.))
 import           Control.Monad.Logger (LogSource)
@@ -38,9 +43,6 @@ data MenuTypes
   = NavbarLeft MenuItem
   | NavbarRight MenuItem
 
--- | A convenient synonym for creating forms.
-type Form x = Html -> MForm (HandlerFor App) (FormResult x, Widget)
-
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
 instance Yesod App where
@@ -52,7 +54,6 @@ instance Yesod App where
   shouldLogIO _ _ _ = return True
   defaultLayout :: Widget -> Handler Html
   defaultLayout widget = do
-    master <- getYesod
     mmsg <- getMessage
     mcurrentRoute <- getCurrentRoute
         -- Get the breadcrumbs, as defined in the YesodBreadcrumbs instance.
@@ -72,14 +73,11 @@ instance Yesod App where
           [x | x <- navbarLeftMenuItems, menuItemAccessCallback x]
     let navbarRightFilteredMenuItems =
           [x | x <- navbarRightMenuItems, menuItemAccessCallback x]
-        -- We break up the default layout into two components:
-        -- default-layout is the contents of the body tag, and
-        -- default-layout-wrapper is the entire page. Since the final
-        -- value passed to hamletToRepHtml cannot be a widget, this allows
-        -- you to use normal widget features in default-layout.
     pc <-
       widgetToPageContent $ do
-        addStylesheet $ StaticR css_bootstrap_css
+        addStylesheet $ StaticR css_uikit_min_css
+        addScript $ StaticR js_uikit_min_js
+        addScript $ StaticR js_uikit_icons_min_js
         $(widgetFile "default-layout")
     withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
   isAuthorized ::
@@ -89,7 +87,7 @@ instance Yesod App where
   isAuthorized FaviconR _ = return Authorized
   isAuthorized _ _        = return Authorized
   addStaticContent ::
-       Text -- ^ The file extension
+       Text
     -> Text -- ^ The MIME content type
     -> LByteString -- ^ The contents of the file
     -> Handler (Maybe (Either Text (Route App, [(Text, Text)])))
@@ -105,7 +103,7 @@ instance Yesod App where
       mime
       content
     where
-      genFileName lbs = "autogen-" ++ base64md5 lbs
+      genFileName lbs = "gen-" ++ base64md5 lbs
 
 -- Define the breadcrumbs
 instance YesodBreadcrumbs App where

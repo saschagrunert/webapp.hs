@@ -13,11 +13,10 @@ import Control.Monad.Logger                 (LogLevel (LevelError), liftLoc,
                                              toLogStr)
 import Data.Default                         (def)
 import Foundation                           (App (App, appHttpManager, appLogger, appSettings, appStatic),
-                                             Route (CommentR, FaviconR, HomeR, StaticR),
+                                             Route (FaviconR, HomeR, StaticR),
                                              resourcesApp)
-import Handler.Comment                      (postCommentR)
 import Handler.Common                       (getFaviconR)
-import Handler.Home                         (getHomeR, postHomeR)
+import Handler.Home                         (getHomeR)
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.HTTP.Client.TLS              (getGlobalManager)
 import Network.Wai                          (Application, Middleware)

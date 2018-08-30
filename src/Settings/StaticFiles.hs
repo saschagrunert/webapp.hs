@@ -1,14 +1,18 @@
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
-module Settings.StaticFiles where
+{-# LANGUAGE TemplateHaskell #-}
 
+module Settings.StaticFiles
+  ( css_uikit_min_css
+  , js_uikit_min_js
+  , js_uikit_icons_min_js
+  ) where
+
+import Control.Lens ((^.))
 import Settings     (appStaticDir, compileTimeAppSettings)
-import Control.Lens             ( (^.))
 import Yesod.Static (staticFiles)
 
--- This generates easy references to files in the static directory at compile time,
--- giving you compile-time verification that referenced files exist.
+-- | This generates easy references to files in the static directory at compile
+-- time, giving you compile-time verification that referenced files exist.
+--
 -- Warning: any files added to your static directory during run-time can't be
 -- accessed this way. You'll have to use their FilePath or URL to access them.
 --
