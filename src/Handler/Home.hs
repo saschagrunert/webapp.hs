@@ -10,9 +10,7 @@ import Import
 --
 -- @since 0.1.0
 getHomeR :: Handler Html
-getHomeR = do
-  let handlerName = "getHomeR" :: Text
+getHomeR =
   defaultLayout $ do
-    aDomId <- newIdent
-    setTitle "Welcome To Yesod!"
-    $(widgetFile "homepage")
+    setTitle "Home"
+    $(widgetFile "home")

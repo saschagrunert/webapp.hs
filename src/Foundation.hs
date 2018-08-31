@@ -11,15 +11,13 @@ module Foundation
   , resourcesApp
   ) where
 
-import           Control.Lens         ((^.))
-import           Control.Monad.Logger (LogSource)
-import qualified Data.CaseInsensitive as CI (foldedCase)
-import qualified Data.Text.Encoding   as TE (decodeUtf8)
-import           Import.NoFoundation
-import           Text.Hamlet          (hamletFile)
-import           Text.Jasmine         (minifym)
-import           Yesod.Core.Types     (Logger)
-import           Yesod.Default.Util   (addStaticContentExternal)
+import Control.Lens         ((^.))
+import Control.Monad.Logger (LogSource)
+import Import.NoFoundation
+import Text.Hamlet          (hamletFile)
+import Text.Jasmine         (minifym)
+import Yesod.Core.Types     (Logger)
+import Yesod.Default.Util   (addStaticContentExternal)
 
 -- | The main application
 --
@@ -31,20 +29,27 @@ data App = App
   , appLogger      :: Logger
   }
 
-mkYesodData "App" $(parseRoutesFile "config/routes")
-
-data MenuItem = MenuItem
-  { menuItemLabel          :: Text
-  , menuItemRoute          :: Route App
-  , menuItemAccessCallback :: Bool
+-- | A single navigation item
+--
+-- @since 0.1.0
+data NavItem = NavItem
+  { _navItemLabel         :: Text
+  , _navItemRoute         :: Route App
+  , navItemAccessCallback :: Bool
   }
 
-data MenuTypes
-  = NavbarLeft MenuItem
-  | NavbarRight MenuItem
+-- | Navigation types to distinguish left from right
+--
+-- @since 0.1.0
+data NavTypes
+  = NavbarLeft NavItem
+  | NavbarRight NavItem
 
--- Please see the documentation for the Yesod typeclass. There are a number
--- of settings which can be configured by overriding methods here.
+mkYesodData "App" $(parseRoutesFile "config/routes")
+
+-- The main yesod instance typeclass
+--
+-- @since 0.1.0
 instance Yesod App where
   makeLogger :: App -> IO Logger
   makeLogger = return . appLogger
@@ -52,40 +57,28 @@ instance Yesod App where
   makeSessionBackend _ = return Nothing
   shouldLogIO :: App -> LogSource -> LogLevel -> IO Bool
   shouldLogIO _ _ _ = return True
+  isAuthorized :: Route App -> Bool -> Handler AuthResult
+  isAuthorized FaviconR _ = return Authorized
+  isAuthorized _ _        = return Authorized
   defaultLayout :: Widget -> Handler Html
   defaultLayout widget = do
-    mmsg <- getMessage
     mcurrentRoute <- getCurrentRoute
-        -- Get the breadcrumbs, as defined in the YesodBreadcrumbs instance.
-    (title, parents) <- breadcrumbs
-        -- Define the menu items of the header.
-    let menuItems =
-          [ NavbarLeft $
-            MenuItem
-            { menuItemLabel = "Home"
-            , menuItemRoute = HomeR
-            , menuItemAccessCallback = True
-            }
-          ]
-    let navbarLeftMenuItems = [x | NavbarLeft x <- menuItems]
-    let navbarRightMenuItems = [x | NavbarRight x <- menuItems]
-    let navbarLeftFilteredMenuItems =
-          [x | x <- navbarLeftMenuItems, menuItemAccessCallback x]
-    let navbarRightFilteredMenuItems =
-          [x | x <- navbarRightMenuItems, menuItemAccessCallback x]
+    -- specify the navigation items
+    let navItems = [NavbarLeft $ NavItem "Home" HomeR True]
+    let navbarLeftItems = [x | NavbarLeft x <- navItems]
+    let navbarRightItems = [x | NavbarRight x <- navItems]
+    let navbarLeftFilteredItems =
+          [x | x <- navbarLeftItems, navItemAccessCallback x]
+    let navbarRightFilteredItems =
+          [x | x <- navbarRightItems, navItemAccessCallback x]
+    -- set the page content
     pc <-
       widgetToPageContent $ do
         addStylesheet $ StaticR css_uikit_min_css
         addScript $ StaticR js_uikit_min_js
         addScript $ StaticR js_uikit_icons_min_js
-        $(widgetFile "default-layout")
-    withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
-  isAuthorized ::
-       Route App -- ^ The route the user is visiting.
-    -> Bool -- ^ Whether or not this is a "write" request.
-    -> Handler AuthResult
-  isAuthorized FaviconR _ = return Authorized
-  isAuthorized _ _        = return Authorized
+        $(widgetFile "layout")
+    withUrlRenderer $(hamletFile "templates/wrapper.hamlet")
   addStaticContent ::
        Text
     -> Text -- ^ The MIME content type
@@ -105,19 +98,9 @@ instance Yesod App where
     where
       genFileName lbs = "gen-" ++ base64md5 lbs
 
--- Define the breadcrumbs
-instance YesodBreadcrumbs App where
-  breadcrumb :: Route App -> Handler (Text, Maybe (Route App))
-  breadcrumb HomeR = return ("Home", Nothing)
-  breadcrumb _     = return ("home", Nothing)
-
--- This instance is required to use forms. You can modify renderMessage to
--- achieve customized and internationalized form validation messages.
-instance RenderMessage App FormMessage where
-  renderMessage :: App -> [Lang] -> FormMessage -> Text
-  renderMessage _ _ = defaultFormMessage
-
 -- | Useful when writing code that is re-usable outside of the Handler context.
+--
+-- @since 0.1.0
 instance HasHttpManager App where
   getHttpManager :: App -> Manager
   getHttpManager = appHttpManager

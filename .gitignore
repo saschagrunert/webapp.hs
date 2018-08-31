@@ -21,6 +21,7 @@
 .hsenv*
 .stack-work-devel/
 .stack-work/
+.sass-cache/
 \#*
 cabal-dev
 cabal.project.local

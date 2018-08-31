@@ -12,9 +12,8 @@ import Control.Monad                        (when)
 import Control.Monad.Logger                 (LogLevel (LevelError), liftLoc,
                                              toLogStr)
 import Data.Default                         (def)
-import Foundation                           (App (App, appHttpManager, appLogger, appSettings, appStatic),
-                                             Route (FaviconR, HomeR, StaticR),
-                                             resourcesApp)
+import Foundation                           (App (..), Route (..), resourcesApp)
+import Handler.Api                          (getApiR, postApiR)
 import Handler.Common                       (getFaviconR)
 import Handler.Home                         (getHomeR)
 import Language.Haskell.TH.Syntax           (qLocation)

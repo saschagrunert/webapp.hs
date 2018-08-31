@@ -1,3 +1,4 @@
-/static         StaticR     Static appStatic
-/favicon.ico    FaviconR    GET
 /               HomeR       GET
+/api            ApiR        GET POST
+/favicon.ico    FaviconR    GET
+/static         StaticR     Static appStatic

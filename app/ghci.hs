@@ -1,22 +1,12 @@
--- | Running the application within GHCi
+-- | The main ghci interface
 --
--- This option provides significantly faster code reload compared to
--- @yesod devel@. However, you do not get automatic code reload
--- (which may be a benefit, depending on your perspective).
+-- $ stack ghci webapp:lib --no-load --work-dir .stack-work-devel
+-- > :l app/ghci.hs
+-- > update
+-- > :r
+-- > update
 --
--- 1. Start up GHCi
---    $ stack ghci webapp:lib --no-load --work-dir .stack-work-devel
--- 2. Load this module
---    > :l app/ghci.hs
--- 3. Run @update@
---    >  Ghci.update
--- 4. Your app should now be running, you can connect at http://localhost:3000
--- 5. Make changes to your code
--- 6. After saving your changes, reload by running:
---    > :r
---    > Ghci.update
---
--- You can also call @DevelMain.shutdown@ to stop the app
+-- @since 0.1.0
 module Ghci
   ( update
   , shutdown
@@ -32,7 +22,6 @@ import Foreign.Store            (Store (Store), lookupStore, readStore,
 import GHC.Word                 (Word32)
 import Network.Wai.Handler.Warp (defaultSettings, runSettings, setPort)
 
--- | Start or restart the server
 update :: IO ()
 update = do
   mtidStore <- lookupStore tidStoreNum
@@ -49,24 +38,19 @@ update = do
   where
     doneStore :: Store (MVar ())
     doneStore = Store 0
-    -- shut the server down with killThread and wait for the done signal
     restartAppInNewThread :: Store (IORef ThreadId) -> IO ()
     restartAppInNewThread tidStore =
       modifyStoredIORef tidStore $ \tid -> do
         killThread tid
         withStore doneStore takeMVar
         readStore doneStore >>= start
-    -- | Start the server in a separate thread.
-    start ::
-         MVar () -- ^ Written to when the thread is killed.
-      -> IO ThreadId
+    start :: MVar () -> IO ThreadId
     start done = do
       (port, site, app) <- getRepl
       forkFinally
         (runSettings (setPort port defaultSettings) app)
         (\_ -> putMVar done () >> (\_ -> return ()) site)
 
--- | Shutdown the server
 shutdown :: IO ()
 shutdown = do
   mtidStore <- lookupStore tidStoreNum
