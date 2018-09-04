@@ -1,7 +1,7 @@
 DIST_DIR := dist
 
 UIKIT_DIR := $(DIST_DIR)/uikit
-UIKIT_TAG := v3.0.0-rc.12
+UIKIT_TAG := v3.0.0-rc.13
 STYLE_SCSS := style.scss
 
 .PHONY: \

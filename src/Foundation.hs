@@ -104,3 +104,9 @@ instance Yesod App where
 instance HasHttpManager App where
   getHttpManager :: App -> Manager
   getHttpManager = appHttpManager
+
+-- Use the standard English messages. Supply a translating function for i18n.
+--
+-- @since 0.1.0
+instance RenderMessage App FormMessage where
+  renderMessage _ _ = defaultFormMessage

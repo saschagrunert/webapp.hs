@@ -3,6 +3,7 @@ module Handler.Api
   , postApiR
   ) where
 
+import Data.Aeson.Types (Result (Success))
 import Import
 
 getApiR :: Handler Value
@@ -10,5 +11,7 @@ getApiR = return $ String "Hello world"
 
 postApiR :: Handler ()
 postApiR = do
-  post <- requireJsonBody :: Handler Value
-  sendResponse post
+  body <- parseJsonBody :: Handler (Result Value)
+  case body of
+    Success v -> sendResponse v
+    _         -> sendResponseStatus status400 ()

@@ -10,4 +10,8 @@
                 $forall NavItem label route _ <- navbarRightFilteredItems
                     <li :Just route == mcurrentRoute:.uk-active>
                         <a href="@{route}">#{label}
-^{widget}
+<div uk-grid .uk-grid-collapse .uk-child-width-expand@l>
+    <div>
+    <div .uk-padding-small>
+        ^{widget}
+    <div>
