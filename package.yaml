@@ -97,3 +97,14 @@ executables:
     when:
       - condition: flag(library-only)
         buildable: false
+tests:
+  simple-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - tasty
+      - tasty-discover
+      - tasty-hspec
+      - tasty-quickcheck
+      - webapp
+      - yesod-test

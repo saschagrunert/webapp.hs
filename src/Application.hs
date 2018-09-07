@@ -5,6 +5,8 @@ module Application
   ( appMain
   , develMain
   , getRepl
+  , makeFoundation
+  , makeLogWare
   ) where
 
 import Control.Lens                         ((^.))

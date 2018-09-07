@@ -4,17 +4,17 @@
 {-# LANGUAGE TemplateHaskell   #-}
 
 module Settings
-  ( appStaticDir
-  , compileTimeAppSettings
-  , AppSettings
-  , widgetFile
+  ( AppSettings
   , appDetailedRequestLogging
   , appHost
+  , appIpFromHeader
   , appMutableStatic
   , appPort
-  , appIpFromHeader
+  , appStaticDir
+  , compileTimeAppSettings
   , configSettingsYml
   , configSettingsYmlValue
+  , widgetFile
   ) where
 
 import           ClassyPrelude.Yesod
